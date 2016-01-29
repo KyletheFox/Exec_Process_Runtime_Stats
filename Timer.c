@@ -28,12 +28,12 @@ int main(int argc, char const *argv[])
 	}
 	
 	// Loop through forks
-	for (i = 0; i < 1000; ++i)	{
+	for (i = 0; i < 10000; ++i)	{
 		
 	gettimeofday(&sp, NULL);
 	fprintf(fs, "%d\n", sp.tv_usec);
 
-		if (fork()) {
+		if (!fork()) {
 			execl("./write", "./write", "resultTime1.txt", (char *)0);
 		}
 		else {
@@ -41,7 +41,7 @@ int main(int argc, char const *argv[])
 			gettimeofday(&sp, NULL);
 			fprintf(fe, "%d\n", sp.tv_usec);
 
-			if (fork())	{
+			if (!fork())	{
 				execl("./write", "./write", "resultTime2.txt", (char *)0);
 			}
 		}

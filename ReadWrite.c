@@ -24,7 +24,7 @@ int main(int argc, char const *argv[])
 	// --------------------------------
 
 
-	int i, randRecNum;
+	int randRecNum;
 	char records[10][121]; 
 	char *randRec;
 	FILE *fs;
@@ -93,7 +93,7 @@ void searchFile(FILE *fp, char *record) {
 		}
 	}
 
-	if (str == EOF)	{
+	if (str == (char *)EOF)	{
 		printf("Record Not Found.\n");
 	}
 }
