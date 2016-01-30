@@ -28,7 +28,7 @@ int main(int argc, char const *argv[])
 	}
 	
 	// Loop through forks
-	for (i = 0; i < 10000; ++i)	{
+	for (i = 0; i < 100000; ++i)	{
 		
 	gettimeofday(&sp, NULL);
 	fprintf(fs, "%d\n", sp.tv_usec);
@@ -38,6 +38,7 @@ int main(int argc, char const *argv[])
 		}
 		else {
 			
+			wait(NULL);
 			gettimeofday(&sp, NULL);
 			fprintf(fe, "%d\n", sp.tv_usec);
 
@@ -45,6 +46,7 @@ int main(int argc, char const *argv[])
 				execl("./write", "./write", "resultTime2.txt", (char *)0);
 			}
 		}
+		wait(NULL);
 	}
 
 	printf("Finished!\n");
