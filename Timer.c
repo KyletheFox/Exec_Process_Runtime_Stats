@@ -17,6 +17,7 @@ int main(int argc, char const *argv[])
     struct timeval sp;
     FILE *fs, *fe;
     int i;
+  
 
     // Open Files
     if ((fs=fopen("startTime1.txt", "w+"))== NULL) {
@@ -28,7 +29,7 @@ int main(int argc, char const *argv[])
 	}
 	
 	// Loop through forks
-	for (i = 0; i < 100000; ++i)	{
+	for (i = 0; i < 50000; ++i)	{
 		
 	gettimeofday(&sp, NULL);
 	fprintf(fs, "%d\n", sp.tv_usec);
@@ -47,9 +48,13 @@ int main(int argc, char const *argv[])
 			}
 		}
 		wait(NULL);
+
+		if ((i%500) == 0) {
+			printf("#");
+		}
 	}
 
-	printf("Finished!\n");
+	printf("\nFinished!\n");
 	fclose(fs);
 	fclose(fe);
 
