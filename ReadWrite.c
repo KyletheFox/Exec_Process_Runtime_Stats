@@ -47,6 +47,16 @@ function to return a timeval struct, which is also apart of that same library. O
 fields of this struct holds a timestamp in mircoseconds. A file is opened up and thios time 
 stamp is writen to the file. 
 
+This program is designed to read and write to the files for several minutes. To accomplish this
+I have both the recordGen(), searchFile() and some other logic inside a loop. The loop runs for 
+a specified amount of iterations. The number of iterations is around 55000 to get this program 
+to run for several minutes. This is tested on my own personal computer.
+
+Everytime this process goes through the loop it opens, deletes and closes the file that the process
+uses. The reason for this is if you don't clear the file out and reopen it, the file just continues
+to grow. Prior to me figuring this out, my record.txt file contained millions of different records
+created by the recordGen(). This has a significant impact on the runtime of this application. 
+
 */
 
 #include <stdio.h>
@@ -79,34 +89,39 @@ int main(int argc, char const *argv[])
 	// --------------------------------
 
 	// ------ Variables ----------------
-	int randRecNum;				// Placeholder for rand number
+	int randRecNum, i;				// Placeholder for rand number
 	char records[10][121]; 		// Array of Strings to hold all the records generated
 	char *randRec;				// Placeholder for the randomly generated record
 	FILE *fs;					// File pointer to the text file where the records are writen.
 
-	// Open file to put write/read records from
-	if ((fs=fopen("Records.txt", "w+"))== NULL) {
-		fprintf(stderr, "ERROR opening %s\n", argv[1]);
-	}
-
 	// Change rand() algorithm
 	srand(time(NULL));
 
-	// Populate File
-	recordGen(fs, records);
+	for (i = 0; i < 55000; i++) {
 
-	// Pick a random record (0-9)
-	randRecNum = rand() % 10;
-	randRec = records[randRecNum];
+		// Open file to put write/read records from
+		if ((fs=fopen("Records.txt", "w+"))== NULL) {
+			fprintf(stderr, "ERROR opening %s\n", argv[1]);
+		}
+
+		// Populate File
+		recordGen(fs, records);
+
+		// Pick a random record (0-9)
+		randRecNum = rand() % 10;
+		randRec = records[randRecNum];
+		
+		// Rewind File
+		rewind(fs);
+
+		// Read File and Search for Record
+		searchFile(fs, randRec);
+
+		remove("Records.txt"); 		// Deletes file as per spec
+		fclose(fs);
+
+	}
 	
-	// Rewind File
-	rewind(fs);
-
-	// Read File and Search for Record
-	searchFile(fs, randRec);
-
-	remove("Records.txt"); 		// Deletes file as per spec
-	fclose(fs);
 	return 0;
 }
 
